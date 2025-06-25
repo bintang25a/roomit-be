@@ -1,28 +1,29 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 
-const User = db.define(
-   "users",
+const Room = db.define(
+   "rooms",
    {
-      uid: {
-         type: DataTypes.STRING(16),
+      kode_ruangan: {
+         type: DataTypes.STRING(8),
          allowNull: false,
-         primaryKey: true
+         primaryKey: true,
       },
       nama: {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      email: {
+      kapasitas: {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      no_hp: {
+      gedung: {
          type: DataTypes.STRING,
          allowNull: false,
       },
-      status: {
-         type: DataTypes.ENUM("mahasiswa", "dosen", "admin"),
+      ketersediaan: {
+         type: DataTypes.BOOLEAN,
+         defaultValue: true,
          allowNull: false,
       },
    },
@@ -31,4 +32,4 @@ const User = db.define(
    }
 );
 
-export default User;
+export default Room;
