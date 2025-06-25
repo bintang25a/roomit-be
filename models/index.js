@@ -5,22 +5,22 @@ import Loan from "./LoanModel.js";
 
 // Definisikan relasi setelah semua model diimpor
 Loan.belongsTo(User, {
-  foreignKey: "id_peminjam",
-  targetKey: "uid"
+   foreignKey: "id_peminjam",
+   targetKey: "uid",
 });
 Loan.belongsTo(Room, {
-  foreignKey: "id_ruangan",
-  targetKey: "kode_ruangan"
+   foreignKey: "kode_ruangan",
+   targetKey: "kode_ruangan",
 });
 
 User.hasMany(Loan, {
-  foreignKey: "id_peminjam",
-  sourceKey: "uid"
+   foreignKey: "id_peminjam",
+   sourceKey: "uid",
 });
 
 Room.hasMany(Loan, {
-  foreignKey: "id_ruangan",
-  sourceKey: "kode_ruangan"
+   foreignKey: "kode_ruangan",
+   sourceKey: "kode_ruangan",
 });
 
 // Export semua model

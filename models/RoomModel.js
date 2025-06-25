@@ -26,6 +26,10 @@ const Room = db.define(
          defaultValue: true,
          allowNull: false,
       },
+      gambar: {
+         type: DataTypes.STRING,
+         allowNull: true,
+      },
    },
    {
       freezeTableName: true,

@@ -4,7 +4,7 @@ import db from "../config/database.js";
 const Loan = db.define(
    "loans",
    {
-      id_ruangan: {
+      kode_ruangan: {
          type: DataTypes.STRING(8),
          allowNull: false,
          references: {

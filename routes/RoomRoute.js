@@ -6,12 +6,13 @@ import {
    update,
    destroy,
 } from "../controllers/RoomController.js";
+import upload from "../middlewares/uploadRoomImage.js";
 
 const router = express.Router();
 
 router.get("/rooms", index);
 router.get("/rooms/:id", show);
-router.post("/rooms/", store);
+router.post("/rooms", upload.single("gambar"), store);
 router.patch("/rooms/:id", update);
 router.delete("/rooms/:id", destroy);
 

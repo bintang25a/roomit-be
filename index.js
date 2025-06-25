@@ -16,14 +16,15 @@ app.use(express.json());
 app.use(UserRoute);
 app.use(RoomRoute);
 app.use(LoanRoute);
+app.use("/images", express.static("uploads"));
 
 (async () => {
    try {
-     await db.sync({ force: true });
-     console.log("Database synced (tables created)");
+      await db.sync({ force: true });
+      console.log("Database synced (tables created)");
    } catch (err) {
-     console.error("Gagal sync:", err);
+      console.error("Gagal sync:", err);
    }
- })();
+})();
 
 app.listen(port, () => console.log(`Server run on http://127.0.0.1:${port}`));

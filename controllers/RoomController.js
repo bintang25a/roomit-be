@@ -24,10 +24,22 @@ export const show = async (req, res) => {
 
 export const store = async (req, res) => {
    try {
-      await Room.create(req.body);
-      res.status(201).json({ msg: "Room add successfully" });
+      const { kode_ruangan, nama, kapasitas, gedung } = req.body;
+
+      const gambar = req.file ? req.file.path : null;
+
+      await Room.create({
+         kode_ruangan,
+         nama,
+         kapasitas,
+         gedung,
+         gambar,
+      });
+
+      res.status(201).json({ msg: "Room added successfully" });
    } catch (error) {
       console.log(error.message);
+      res.status(500).json({ msg: "Error creating room" });
    }
 };
 
