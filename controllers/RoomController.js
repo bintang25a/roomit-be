@@ -1,33 +1,45 @@
 import Room from "../models/RoomModel.js";
+import fs from "fs";
+import path from "path";
 
 export const index = async (req, res) => {
    try {
-      const response = await Room.findAll();
-      res.status(200).json(response);
+      const room = await Room.findAll();
+      res.status(200).json(room);
    } catch (error) {
       console.log(error.message);
+      res.status(500).json({ msg: "Display all rooms failed" });
    }
 };
 
 export const show = async (req, res) => {
    try {
-      const response = await Room.findOne({
+      const room = await Room.findOne({
          where: {
-            id: req.params.id,
+            slug: req.params.slug,
          },
       });
-      res.status(200).json(response);
+
+      if (!room) return res.status(404).json({ msg: "Room not found" });
+
+      res.status(200).json(room);
    } catch (error) {
       console.log(error.message);
+      res.status(500).json({ msg: "Display one room failed" });
    }
 };
 
 export const store = async (req, res) => {
+   const { kode_ruangan, nama, kapasitas, gedung } = req.body;
+   const { file } = req.file;
+
+   if (!kode_ruangan || !nama || !kapasitas || !gedung || !file) {
+      return res.status(400).json({ msg: "Field cannot empty" });
+   }
+
+   const gambar = req.file ? `/rooms/images/${req.file.filename}` : null;
+
    try {
-      const { kode_ruangan, nama, kapasitas, gedung } = req.body;
-
-      const gambar = req.file ? req.file.path : null;
-
       await Room.create({
          kode_ruangan,
          nama,
@@ -36,35 +48,90 @@ export const store = async (req, res) => {
          gambar,
       });
 
-      res.status(201).json({ msg: "Room added successfully" });
+      res.status(201).json({ msg: "Create room successfully" });
    } catch (error) {
       console.log(error.message);
-      res.status(500).json({ msg: "Error creating room" });
+      res.status(500).json({ msg: "Create room failed" });
    }
 };
 
 export const update = async (req, res) => {
+   const { kode_ruangan, nama, kapasitas, gedung, ketersediaan } = req.body;
+
+   const room = await Room.findOne({
+      where: {
+         kode_ruangan: req.params.kode_ruangan,
+      },
+   });
+
+   if (!room) return res.status(404).json({ msg: "Room not found" });
+
    try {
-      await Room.update(req.body, {
-         where: {
-            id: req.params.id,
+      let gambar = room.gambar;
+      if (req.file) {
+         gambar = `/rooms/images/${req.file.filename}`;
+
+         if (room.gambar) {
+            const oldFilePath = path.join(
+               "uploads",
+               path.basename(room.gambar)
+            );
+            if (fs.existsSync(oldFilePath)) {
+               fs.unlinkSync(oldFilePath);
+            }
+         }
+      }
+
+      await Room.update(
+         {
+            kode_ruangan,
+            nama,
+            kapasitas,
+            gedung,
+            gambar,
+            ketersediaan,
          },
-      });
-      res.status(200).json({ msg: "Room edit successfully" });
+         {
+            where: {
+               kode_ruangan: req.params.kode_ruangan,
+            },
+         }
+      );
+
+      res.status(200).json({ msg: "Update room successfully" });
    } catch (error) {
       console.log(error.message);
+      res.status(500).json({ msg: "Update room failed" });
    }
 };
 
 export const destroy = async (req, res) => {
+   const room = await Room.findOne({
+      where: {
+         kode_ruangan: req.params.kode_ruangan,
+      },
+   });
+
+   if (!room) return res.status(404).json({ msg: "Room not found" });
+
    try {
+      const gambar = room.gambar;
+      if (gambar) {
+         const oldImagePath = path.join("uploads", path.basename(gambar));
+         if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+         }
+      }
+
       await Room.destroy({
          where: {
-            id: req.params.id,
+            kode_ruangan: req.params.kode_ruangan,
          },
       });
-      res.status(200).json({ msg: "Room delete successfully" });
+
+      res.status(200).json({ msg: "Delete room successfully" });
    } catch (error) {
       console.log(error.message);
+      res.status(500).json({ msg: "Delete room failed" });
    }
 };

@@ -3,7 +3,6 @@ import User from "./UserModel.js";
 import Room from "./RoomModel.js";
 import Loan from "./LoanModel.js";
 
-// Definisikan relasi setelah semua model diimpor
 Loan.belongsTo(User, {
    foreignKey: "id_peminjam",
    targetKey: "uid",
@@ -23,5 +22,4 @@ Room.hasMany(Loan, {
    sourceKey: "kode_ruangan",
 });
 
-// Export semua model
 export { db, User, Room, Loan };

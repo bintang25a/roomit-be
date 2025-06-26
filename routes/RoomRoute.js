@@ -6,14 +6,21 @@ import {
    update,
    destroy,
 } from "../controllers/RoomController.js";
-import upload from "../middlewares/uploadRoomImage.js";
+import upload from "../middlewares/UploadRoomImage.js";
+import { verifyUser, adminOnly } from "../middlewares/AuthUser.js";
 
 const router = express.Router();
 
 router.get("/rooms", index);
-router.get("/rooms/:id", show);
-router.post("/rooms", upload.single("gambar"), store);
-router.patch("/rooms/:id", update);
-router.delete("/rooms/:id", destroy);
+router.get("/rooms/:slug", show);
+router.post("/rooms", verifyUser, adminOnly, upload.single("gambar"), store);
+router.patch(
+   "/rooms/:kode_ruangan",
+   verifyUser,
+   adminOnly,
+   upload.single("gambar"),
+   update
+);
+router.delete("/rooms/:kode_ruangan", verifyUser, adminOnly, destroy);
 
 export default router;

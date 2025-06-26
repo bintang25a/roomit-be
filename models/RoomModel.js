@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
+import slugify from "slugify";
 
 const Room = db.define(
    "rooms",
@@ -30,9 +31,26 @@ const Room = db.define(
          type: DataTypes.STRING,
          allowNull: true,
       },
+      slug: {
+         type: DataTypes.STRING,
+         allowNull: true,
+         unique: true,
+      },
    },
    {
       freezeTableName: true,
+      hooks: {
+         beforeCreate: (room) => {
+            room.slug = slugify(`${room.nama}-${Date.now()}`, { lower: true });
+         },
+         beforeUpdate: (room) => {
+            if (room.changed("nama")) {
+               room.slug = slugify(`${room.nama}-${Date.now()}`, {
+                  lower: true,
+               });
+            }
+         },
+      },
    }
 );
 
