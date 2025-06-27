@@ -26,12 +26,32 @@ const Loan = db.define(
             key: "uid",
          },
       },
+      nama_pj: {
+         type: DataTypes.STRING,
+         allowNull: false,
+      },
       tanggal_pengajuan: {
          type: DataTypes.DATE,
          allowNull: false,
       },
       tanggal_pemakaian: {
          type: DataTypes.DATE,
+         allowNull: false,
+      },
+      waktu_mulai: {
+         type: DataTypes.TIME,
+         allowNull: false,
+      },
+      waktu_selesai: {
+         type: DataTypes.TIME,
+         allowNull: false,
+      },
+      keperluan: {
+         type: DataTypes.STRING,
+         allowNull: false,
+      },
+      progres: {
+         type: DataTypes.ENUM("accepted", " rejected", " onprogres"),
          allowNull: false,
       },
       slug: {

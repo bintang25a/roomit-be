@@ -28,6 +28,34 @@ export const show = async (req, res) => {
 };
 
 export const store = async (req, res) => {
+   const {
+      nomor_peminjaman,
+      kode_ruangan,
+      id_peminjam,
+      nama_pj,
+      tanggal_pengajuan,
+      tanggal_pemakaian,
+      waktu_mulai,
+      waktu_selesai,
+      keperluan,
+      progres,
+   } = req.body;
+
+   if (
+      !nomor_peminjaman ||
+      !kode_ruangan ||
+      !id_peminjam ||
+      !nama_pj ||
+      !tanggal_pengajuan ||
+      !tanggal_pemakaian ||
+      !waktu_mulai ||
+      !waktu_selesai ||
+      !keperluan ||
+      !progres
+   ) {
+      return res.status(400).json({ msg: "Field cannot empty" });
+   }
+
    try {
       await Loan.create(req.body);
       res.status(201).json({ msg: "Create loan successfully" });
