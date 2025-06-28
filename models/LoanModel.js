@@ -51,7 +51,7 @@ const Loan = db.define(
          allowNull: false,
       },
       progres: {
-         type: DataTypes.ENUM("accepted", " rejected", " onprogres"),
+         type: DataTypes.ENUM("accepted", "rejected", "onprogres"),
          allowNull: false,
       },
       slug: {
