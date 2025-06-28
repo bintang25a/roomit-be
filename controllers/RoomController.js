@@ -1,10 +1,17 @@
 import Room from "../models/RoomModel.js";
 import fs from "fs";
 import path from "path";
+import Loan from "../models/LoanModel.js";
 
 export const index = async (req, res) => {
    try {
-      const room = await Room.findAll();
+      const room = await Room.findAll({
+         include: [
+            {
+               model: Loan,
+            },
+         ],
+      });
       res.status(200).json(room);
    } catch (error) {
       console.log(error.message);
@@ -18,6 +25,11 @@ export const show = async (req, res) => {
          where: {
             slug: req.params.slug,
          },
+         include: [
+            {
+               model: Loan,
+            },
+         ],
       });
 
       if (!room) return res.status(404).json({ msg: "Room not found" });

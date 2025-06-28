@@ -6,7 +6,7 @@ const Room = db.define(
    "rooms",
    {
       kode_ruangan: {
-         type: DataTypes.STRING(8),
+         type: DataTypes.STRING(16),
          allowNull: false,
          primaryKey: true,
       },
@@ -15,7 +15,7 @@ const Room = db.define(
          allowNull: false,
       },
       kapasitas: {
-         type: DataTypes.STRING,
+         type: DataTypes.INTEGER,
          allowNull: false,
       },
       gedung: {

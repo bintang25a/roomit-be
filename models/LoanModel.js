@@ -6,12 +6,12 @@ const Loan = db.define(
    "loans",
    {
       nomor_peminjaman: {
-         type: DataTypes.STRING(24),
+         type: DataTypes.STRING(48),
          allowNull: false,
          primaryKey: true,
       },
       kode_ruangan: {
-         type: DataTypes.STRING(8),
+         type: DataTypes.STRING(16),
          allowNull: false,
          references: {
             model: "rooms",

@@ -1,8 +1,22 @@
 import Loan from "../models/LoanModel.js";
+import Room from "../models/RoomModel.js";
+import User from "../models/UserModel.js";
 
 export const index = async (req, res) => {
    try {
-      const loan = await Loan.findAll();
+      const loan = await Loan.findAll({
+         include: [
+            {
+               model: User,
+               attributes: {
+                  exclude: ["password"],
+               },
+            },
+            {
+               model: Room,
+            },
+         ],
+      });
       res.status(200).json(loan);
    } catch (error) {
       console.log(error.message);
@@ -16,6 +30,17 @@ export const show = async (req, res) => {
          where: {
             slug: req.params.slug,
          },
+         include: [
+            {
+               model: User,
+               attributes: {
+                  exclude: ["password"],
+               },
+            },
+            {
+               model: Room,
+            },
+         ],
       });
 
       if (!loan) return res.status(404).json({ msg: "Loan not found" });

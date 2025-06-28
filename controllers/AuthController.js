@@ -24,20 +24,25 @@ export const login = async (req, res) => {
 };
 
 export const Me = async (req, res) => {
-   if (!req.session.uid) {
-      return res.status(401).json({ msg: "Please login!" });
+   try {
+      if (!req.session.uid) {
+         return res.status(401).json({ msg: "Please login!" });
+      }
+
+      const uid = String(req.session.uid).trim();
+      const user = await User.findOne({
+         where: {
+            uid,
+         },
+         attributes: ["uid", "nama", "no_hp", "email", "role", "slug"],
+      });
+
+      if (!user) return res.status(404).json({ msg: "User not found!" });
+
+      return res.status(200).json(user);
+   } catch (error) {
+      console.log(error);
    }
-
-   const user = await User.findOne({
-      where: {
-         uid: req.session.uid,
-      },
-      attributes: ["uid", "nama", "no_hp", "email", "status", "slug"],
-   });
-
-   if (!user) return res.status(404).json({ msg: "User not found!" });
-
-   return res.status(200).json(user);
 };
 
 export const logout = async (req, res) => {

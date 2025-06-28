@@ -1,10 +1,25 @@
 import User from "../models/UserModel.js";
+import Loan from "../models/LoanModel.js";
+import Room from "../models/RoomModel.js";
 import bcrypt from "bcrypt";
 
 export const index = async (req, res) => {
    try {
       const user = await User.findAll({
-         attributes: ["uid", "nama", "no_hp", "email", "role", "slug"],
+         attributes: {
+            exclude: ["password"],
+         },
+         include: [
+            {
+               model: Loan,
+               include: [
+                  {
+                     model: Room,
+                     attributes: ["nama", "kapasitas"],
+                  },
+               ],
+            },
+         ],
       });
       res.status(200).json(user);
    } catch (error) {
@@ -19,7 +34,20 @@ export const show = async (req, res) => {
          where: {
             slug: req.params.slug,
          },
-         attributes: ["uid", "nama", "no_hp", "email", "role", "slug"],
+         attributes: {
+            exclude: ["password"],
+         },
+         include: [
+            {
+               model: Loan,
+               include: [
+                  {
+                     model: Room,
+                     attributes: ["nama"],
+                  },
+               ],
+            },
+         ],
       });
 
       if (!user) return res.status(404).json({ msg: "User not found" });

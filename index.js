@@ -24,15 +24,26 @@ app.use(
    session({
       secret: process.env.SESS_KEY,
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
       store,
       cookie: {
+         maxAge: 1 * 60 * 60 * 1000, // 1 hari
          secure: "auto",
+         httpOnly: true,
+         sameSite: "lax",
       },
    })
 );
 
-app.use(cors());
+app.use(
+   cors({
+      credentials: true,
+      origin: [
+         "https://7418fqfm-5173.asse.devtunnels.ms",
+         "http://localhost:5173",
+      ],
+   })
+);
 app.use(express.json());
 app.use(UserRoute);
 app.use(RoomRoute);
@@ -49,6 +60,6 @@ app.use("/rooms/images", express.static("uploads"));
 //    }
 // })();
 
-// store.sync();
+// store.sync({ alter: true });
 
 app.listen(port, () => console.log(`Server run on http://127.0.0.1:${port}`));
