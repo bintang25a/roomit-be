@@ -43,13 +43,12 @@ export const show = async (req, res) => {
 
 export const store = async (req, res) => {
    const { kode_ruangan, nama, kapasitas, gedung } = req.body;
-   const { file } = req.file;
 
-   if (!kode_ruangan || !nama || !kapasitas || !gedung || !file) {
+   if (!kode_ruangan || !nama || !kapasitas || !gedung) {
       return res.status(400).json({ msg: "Field cannot empty" });
    }
 
-   const gambar = req.file ? `/rooms/images/${req.file.filename}` : null;
+   const gambar = req.file ? `rooms/images/${req.file.filename}` : null;
 
    try {
       await Room.create({
@@ -81,7 +80,7 @@ export const update = async (req, res) => {
    try {
       let gambar = room.gambar;
       if (req.file) {
-         gambar = `/rooms/images/${req.file.filename}`;
+         gambar = `rooms/images/${req.file.filename}`;
 
          if (room.gambar) {
             const oldFilePath = path.join(
